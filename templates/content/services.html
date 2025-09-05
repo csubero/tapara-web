@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Servicios - {{ company_info.company_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="fw-bold">Nuestros Servicios</h1>
+            <p class="text-muted lead">Soluciones tecnológicas completas para hacer crecer tu negocio</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        {% if services %}
+        <div class="row g-4">
+            {% for service in services %}
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card h-100">
+                    <div class="service-icon">
+                        <i class="{{ service.icon }} fa-2x"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">{{ service.name }}</h4>
+                    <p class="text-muted mb-4">{{ service.description }}</p>
+                    {% if service.is_featured %}
+                    <div class="text-center">
+                        <span class="badge bg-primary">Servicio Destacado</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-cog fa-4x text-muted mb-4"></i>
+            <h3 class="text-muted">Próximamente</h3>
+            <p class="text-muted">Estamos preparando nuestros servicios. ¡Vuelve pronto!</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Process Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Nuestro Proceso</h2>
+            <p class="text-muted">Cómo trabajamos contigo para llevar tu proyecto al éxito</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="process-card text-center">
+                    <div class="process-number">1</div>
+                    <h5 class="fw-bold mb-3">Análisis</h5>
+                    <p class="text-muted">Entendemos tus necesidades y objetivos para crear la mejor solución</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="process-card text-center">
+                    <div class="process-number">2</div>
+                    <h5 class="fw-bold mb-3">Planificación</h5>
+                    <p class="text-muted">Diseñamos una estrategia detallada y cronograma de desarrollo</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="process-card text-center">
+                    <div class="process-number">3</div>
+                    <h5 class="fw-bold mb-3">Desarrollo</h5>
+                    <p class="text-muted">Construimos tu solución usando las mejores tecnologías</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="process-card text-center">
+                    <div class="process-number">4</div>
+                    <h5 class="fw-bold mb-3">Entrega</h5>
+                    <p class="text-muted">Desplegamos y te capacitamos para usar tu nueva solución</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="fw-bold mb-4">¿Listo para empezar tu proyecto?</h2>
+            <p class="lead mb-4">Contáctanos hoy y conversemos sobre cómo podemos ayudarte</p>
+            <a href="{% url 'contact' %}" class="btn btn-light btn-lg px-5">
+                Solicitar Consulta Gratuita
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.process-card {
+    padding: 2rem 1rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.process-card:hover {
+    transform: translateY(-8px);
+}
+
+.process-number {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 auto 1.5rem;
+}
+</style>
+{% endblock %}
