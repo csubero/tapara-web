@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load content_filters %}
+
+{% block title %}{{ project.name }} - Proyectos{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'projects' %}">Proyectos</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ project.name }}</li>
+            </ol>
+        </nav>
+        
+        <div class="row g-5">
+            <div class="col-lg-8">
+                {% if project.image %}
+                <div class="project-detail-image mb-4">
+                    <img src="{{ project.image.url }}" alt="{{ project.name }}" class="img-fluid rounded">
+                </div>
+                {% endif %}
+                
+                <div class="project-header mb-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h1 class="fw-bold">{{ project.name }}</h1>
+                        <span class="badge bg-{{ project.status|yesno:'success,warning,secondary' }} fs-6">
+                            {{ project.get_status_display }}
+                        </span>
+                    </div>
+                    
+                    <p class="lead text-muted">{{ project.short_description }}</p>
+                </div>
+                
+                <div class="project-content">
+                    <h3 class="fw-bold mb-3">Descripción del Proyecto</h3>
+                    <div class="text-muted mb-4">{{ project.description|linebreaks }}</div>
+                    
+                    {% if technologies %}
+                    <h4 class="fw-bold mb-3">Tecnologías Utilizadas</h4>
+                    <div class="technologies-list mb-4">
+                        {% for tech in technologies %}
+                            <span class="badge bg-light text-dark me-2 mb-2 p-2">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if project.url or project.github_url %}
+                    <h4 class="fw-bold mb-3">Enlaces</h4>
+                    <div class="project-links mb-4">
+                        {% if project.url %}
+                        <a href="{{ project.url }}" target="_blank" class="btn btn-primary me-3">
+                            <i class="fas fa-external-link-alt me-2"></i>Ver Proyecto
+                        </a>
+                        {% endif %}
+                        {% if project.github_url %}
+                        <a href="{{ project.github_url }}" target="_blank" class="btn btn-dark">
+                            <i class="fab fa-github me-2"></i>Ver Código
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="project-sidebar">
+                    <div class="sidebar-card">
+                        <h5 class="fw-bold mb-3">Detalles del Proyecto</h5>
+                        
+                        <div class="project-detail-item mb-3">
+                            <strong class="text-muted">Estado:</strong>
+                            <span class="badge bg-{{ project.status|yesno:'success,warning,secondary' }} ms-2">
+                                {{ project.get_status_display }}
+                            </span>
+                        </div>
+                        
+                        <div class="project-detail-item mb-3">
+                            <strong class="text-muted">Fecha:</strong>
+                            <span class="ms-2">{{ project.created_at|date:"F Y" }}</span>
+                        </div>
+                        
+                        {% if project.is_featured %}
+                        <div class="project-detail-item mb-3">
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-star me-1"></i>Proyecto Destacado
+                            </span>
+                        </div>
+                        {% endif %}
+                        
+                        <hr>
+                        
+                        <div class="contact-cta">
+                            <h6 class="fw-bold mb-2">¿Tienes un proyecto similar?</h6>
+                            <p class="text-muted small mb-3">Nos encantaría ayudarte a llevarlo a la realidad</p>
+                            <a href="{% url 'contact' %}" class="btn btn-outline-primary w-100">
+                                Contactanos
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Related Projects -->
+                    <div class="sidebar-card mt-4">
+                        <h6 class="fw-bold mb-3">Otros Proyectos</h6>
+                        <div class="related-projects">
+                            <a href="{% url 'projects' %}" class="btn btn-sm btn-outline-secondary w-100">
+                                Ver Todos los Proyectos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="fw-bold mb-3">¿Te gustó este proyecto?</h2>
+            <p class="text-muted lead mb-4">Podemos crear algo similar para tu negocio</p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{% url 'contact' %}" class="btn btn-primary btn-lg px-4">
+                    Solicitar Cotización
+                </a>
+                <a href="{% url 'projects' %}" class="btn btn-outline-primary btn-lg px-4">
+                    Ver Más Proyectos
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.project-detail-image {
+    max-height: 400px;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.project-detail-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sidebar-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.project-detail-item {
+    padding: 0.5rem 0;
+}
+
+.technologies-list .badge {
+    font-size: 0.9rem;
+}
+
+.breadcrumb {
+    background: none;
+    padding: 0;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+</style>
+{% endblock %}
